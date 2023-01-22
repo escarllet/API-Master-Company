@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace API_Master_Company.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
+   
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -16,11 +16,15 @@ namespace API_Master_Company.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
+            
         }
+     
+       
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+           
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -28,6 +32,8 @@ namespace API_Master_Company.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+
+            
         }
     }
 }
