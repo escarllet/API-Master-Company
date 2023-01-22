@@ -11,29 +11,36 @@ using Api.Datos.Repositories;
 
 namespace Api.Datos.Controllers
 {
-    public class MasteryCompanyJsonControllers : IMasterCompanyDatabase
+    public class MasteryCompanyJsonControllers : IMasterCompanyDatabase, IConvertToText
     {
-        public string PathDataBase()
+        public string PathDataBase() {
+            string path = @"../masterycompany.txt";
+            return path;
+        }
+        public string TextDataBase()
         {
-            string filename = File.ReadAllText("../masterycompany.json");
+            string filename = File.ReadAllText("../masterycompany.txt");
 
             return filename;
         }
         public  List <MasteryCompanymodeljson> ConvertDataToListObjet()
         {        
-            var deserializedjson = JsonConvert.DeserializeObject<List <MasteryCompanymodeljson>>(PathDataBase())!;
+            var deserializedjson = JsonConvert.DeserializeObject<List <MasteryCompanymodeljson>>(TextDataBase())!;
                      
             return deserializedjson;
         }
         public  void AddEmployed(List<MasteryCompanymodeljson> masteries)
         {
             string output = JsonConvert.SerializeObject(masteries);
-            string path = @"../masterycompany.json";
-            System.IO.File.WriteAllText(path, output);
+            System.IO.File.WriteAllText(PathDataBase(), output);
 
         }
 
-
+        public void RemoveEmployed(List<MasteryCompanymodeljson> masteries)
+        {
+            string output = JsonConvert.SerializeObject(masteries);        
+            System.IO.File.WriteAllText(PathDataBase(), output);
+        }
     }
 
 }

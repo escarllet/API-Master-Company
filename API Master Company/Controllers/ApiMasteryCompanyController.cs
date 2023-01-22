@@ -7,9 +7,15 @@ namespace API_Master_Company.Controllers
 {
     [ApiController]
     [Route("API/[controller]")]
-    public class ApiMasteryCompanyjsonController : ControllerBase
+    public class ApiMasteryCompanyController : ControllerBase
     {
-        
+        private readonly ILogger<WeatherForecastController> _logger;
+
+        public ApiMasteryCompanyController(ILogger<WeatherForecastController> logger)
+        {
+            _logger = logger;
+
+        }
 
         [HttpGet("GetAll")]
 
@@ -134,7 +140,7 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpPost("DeleteEmployee")]
-        public List<MasteryCompanymodeljson> DeleteEmployee(string Cedula)
+        public List<MasteryCompanymodeljson> DeleteEmployee(string Document)
         {
             IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
 
@@ -142,13 +148,14 @@ namespace API_Master_Company.Controllers
 
 
             var EmployeeByDocument = from Employee in masteries
-                                where Employee.Document == Cedula
+                                where Employee.Document == Document
                                 select Employee;
             if (EmployeeByDocument != null)
-            {
-                return ModelEmployee.makelist(EmployeeByDocument);
+            {             
+                masteries = masteries.Except(ModelEmployee.makelist(EmployeeByDocument)).ToList();
+               
             }
-
+            masteryCompanyData.RemoveEmployed(masteries);
             return masteries;
 
 

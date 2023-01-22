@@ -12,6 +12,7 @@ namespace Api.Datos.Repositories
         string PathDataBase();
         List<MasteryCompanymodeljson> ConvertDataToListObjet();
         void AddEmployed(List<MasteryCompanymodeljson> masteries);
+        void RemoveEmployed(List<MasteryCompanymodeljson> masteries);
 
     }
 }
