@@ -9,9 +9,9 @@ namespace API_Master_Company.Controllers
     [Route("API/[controller]")]
     public class ApiMasteryCompanyController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<ApiMasteryCompanyController> _logger;
 
-        public ApiMasteryCompanyController(ILogger<WeatherForecastController> logger)
+        public ApiMasteryCompanyController(ILogger<ApiMasteryCompanyController> logger)
         {
             _logger = logger;
 
@@ -21,7 +21,7 @@ namespace API_Master_Company.Controllers
 
         public List<MasteryCompanymodeljson> GetAll()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
             
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
             
@@ -36,7 +36,7 @@ namespace API_Master_Company.Controllers
         [HttpGet("GetDistinct")]
         public List<MasteryCompanymodeljson> Get()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
 
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
 
@@ -52,7 +52,7 @@ namespace API_Master_Company.Controllers
         [HttpGet("GetEmployeeSalaryIncrease")]
         public List<MasteryCompanymodeljson> GetEmployeeSalaryIncrease()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
 
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
 
@@ -111,7 +111,7 @@ namespace API_Master_Company.Controllers
         [HttpGet("GetEmployeesProportionByGender")]
         public List<string> GetEmployeesProportionByGender()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
 
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
             var male = ((from masculine in Get() where masculine.Gender == "M" select masculine).Distinct().Count() * 100) / Get().Count();
@@ -126,7 +126,7 @@ namespace API_Master_Company.Controllers
         [HttpGet("GetEmployeeBySalaryRange")]
         public List<MasteryCompanymodeljson> GetEmployeeBySalaryRange(int inicio, int final)
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
 
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
 
@@ -142,7 +142,8 @@ namespace API_Master_Company.Controllers
         [HttpPost("DeleteEmployee")]
         public List<MasteryCompanymodeljson> DeleteEmployee(string Document)
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
+            IAddEmployee masteryCompanyDataDeactive = new MasteryCompanyDeactiveJsonControllers();
 
             List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
 
@@ -155,6 +156,8 @@ namespace API_Master_Company.Controllers
                 masteries = masteries.Except(ModelEmployee.makelist(EmployeeByDocument)).ToList();
                
             }
+           
+            masteryCompanyDataDeactive.AddEmployed(new HashSet<MasteryCompanymodeljson>(ModelEmployee.makelist(EmployeeByDocument)).ToList());
             masteryCompanyData.RemoveEmployed(masteries);
             return masteries;
 
@@ -164,9 +167,12 @@ namespace API_Master_Company.Controllers
         [HttpPost("InsertEmployee")]
         public List<MasteryCompanymodeljson> InsertEmployee(MasteryCompanymodeljson empleado)
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyJsonControllers();
+            IAddEmployee masteryCompanyDataActive = new MasteryCompanyActivateJsonControllers();
+            
 
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
+            IMasterCompanyDatabase MasterCompanyDatabase = new MasteryCompanyActivateJsonControllers();
+
+            List<MasteryCompanymodeljson> masteries = MasterCompanyDatabase.ConvertDataToListObjet();
 
             masteries.Add(new MasteryCompanymodeljson() { 
                 Name = empleado.Name,
@@ -178,7 +184,7 @@ namespace API_Master_Company.Controllers
                 StartDate= empleado.StartDate
             }
             );
-            masteryCompanyData.AddEmployed(masteries);
+            masteryCompanyDataActive.AddEmployed(masteries);
             return masteries;
         }
     }

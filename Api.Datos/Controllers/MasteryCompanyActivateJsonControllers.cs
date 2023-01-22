@@ -11,15 +11,15 @@ using Api.Datos.Repositories;
 
 namespace Api.Datos.Controllers
 {
-    public class MasteryCompanyJsonControllers : IMasterCompanyDatabase, IConvertToText
+    public class MasteryCompanyActivateJsonControllers : IMasterCompanyDatabase, IConvertDataToString, IAddEmployee
     {
         public string PathDataBase() {
-            string path = @"../masterycompany.txt";
+            string path = @"../MasteryCompanyActiveEmployee.txt";
             return path;
         }
         public string TextDataBase()
         {
-            string filename = File.ReadAllText("../masterycompany.txt");
+            string filename = File.ReadAllText("../MasteryCompanyActiveEmployee.txt");
 
             return filename;
         }

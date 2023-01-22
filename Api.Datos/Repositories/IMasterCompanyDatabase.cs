@@ -10,8 +10,7 @@ namespace Api.Datos.Repositories
    public interface IMasterCompanyDatabase
     {
         string PathDataBase();
-        List<MasteryCompanymodeljson> ConvertDataToListObjet();
-        void AddEmployed(List<MasteryCompanymodeljson> masteries);
+        List<MasteryCompanymodeljson> ConvertDataToListObjet();       
         void RemoveEmployed(List<MasteryCompanymodeljson> masteries);
 
     }
