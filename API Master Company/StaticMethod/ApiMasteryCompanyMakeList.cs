@@ -5,12 +5,12 @@ namespace API_Master_Company
 {
     public class ApiMasteryCompanyMakeList
     {
-        public static List<MasterCompanyModel> makelist(IEnumerable<MasterCompanyModel> all)
+        public static List<EmployeeModel> makelist(IEnumerable<EmployeeModel> all)
         {
-            List<MasterCompanyModel> masteri = new List<MasterCompanyModel>();
+            List<EmployeeModel> masteri = new List<EmployeeModel>();
             foreach (var newlist in all)
             {
-                masteri.Add(new MasterCompanyModel()
+                masteri.Add(new EmployeeModel()
                 {
                     Name = newlist.Name,
                     LastName = newlist.LastName,

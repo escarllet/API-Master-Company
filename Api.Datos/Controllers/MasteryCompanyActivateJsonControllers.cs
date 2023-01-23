@@ -23,20 +23,20 @@ namespace Api.Datos.Controllers
 
             return filename;
         }
-        public  List <MasterCompanyModel> ConvertDataToListObjet()
+        public  List <EmployeeModel> ConvertDataToListObjet()
         {        
-            var deserializedjson = JsonConvert.DeserializeObject<List<MasterCompanyModel>>(TextDataBase())!;
+            var deserializedjson = JsonConvert.DeserializeObject<List<EmployeeModel>>(TextDataBase())!;
                      
             return deserializedjson;
         }
-        public  void AddEmployed(List<MasterCompanyModel> masteries)
+        public  void AddEmployed(List<EmployeeModel> masteries)
         {
             string output = JsonConvert.SerializeObject(masteries);
             System.IO.File.WriteAllText(PathDataBase(), output);
 
         }
 
-        public void RemoveEmployed(List<MasterCompanyModel> masteries)
+        public void RemoveEmployed(List<EmployeeModel> masteries)
         {
             string output = JsonConvert.SerializeObject(masteries);        
             System.IO.File.WriteAllText(PathDataBase(), output);

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Api.Entidad.Models
 {
     
-    public class MasterCompanyModel : IEquatable<MasterCompanyModel>
+    public class EmployeeModel : IEquatable<EmployeeModel>
     {
         [Required]
         public string Name { get; set; }
@@ -26,7 +26,7 @@ namespace Api.Entidad.Models
         [Required]
         public string StartDate { get; set; }
 
-        public bool Equals(MasterCompanyModel other)
+        public bool Equals(EmployeeModel other)
         {
             return Document.Equals(other.Document);
         }

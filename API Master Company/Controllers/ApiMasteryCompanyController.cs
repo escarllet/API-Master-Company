@@ -1,6 +1,7 @@
 ﻿using Api.Datos.Controllers;
 using Api.Datos.Repositories;
 using Api.Entidad.Models;
+using Api.Entity.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Master_Company.Controllers
@@ -17,13 +18,13 @@ namespace API_Master_Company.Controllers
         }
         
         [HttpGet("GetDistinct")]
-        public ActionResult<List<MasterCompanyModel>> Get()
+        public ActionResult<List<EmployeeModel>> Get()
         {
             try
             {
 
 
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
                 var AllDistinct = (from masterie in masteries
                                    select masterie).Distinct();
@@ -40,13 +41,13 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpGet("GetEmployeeSalaryIncrease")]
-        public ActionResult<List<MasterCompanyModel>> GetEmployeeSalaryIncrease()
+        public ActionResult<List<EmployeeModel>> GetEmployeeSalaryIncrease()
         {
             try
             {
 
 
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet().Distinct().ToList();
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet().Distinct().ToList();
                 masteries.ForEach(masterie =>
                 {
                     masterie.Salary = masterie.Salary >= 100000 ? masterie.Salary + (masterie.Salary * 0.25) : masterie.Salary + (masterie.Salary * 0.3);
@@ -61,11 +62,12 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpGet("GetEmployeesProportionByGender")]
-        public ActionResult<List<string>> GetEmployeesProportionByGender()
+        public ActionResult<ProportionListModel> GetEmployeesProportionByGender()
         {
             try
             {
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
                 var employees = (from masterie in masteries
                                  select masterie).Distinct();
 
@@ -73,10 +75,14 @@ namespace API_Master_Company.Controllers
                 var male = ((from masculine in employees where masculine.Gender == "M" select masculine).Distinct().Count() * 100) / employees.Count();
                 var female = ((from feminine in employees where feminine.Gender == "F" select feminine).Distinct().Count() * 100) / employees.Count();
 
-                List<string> a = new List<string>();
-                a.Add("Masculino: " + male + "%");
-                a.Add("Femenino: " + female + "%");
-                return a;
+                
+                ProportionListModel listModel = new ProportionListModel
+                {
+                    Masculine = male + "%",
+                    Feminine = female + "%"
+                };
+
+                return listModel;
             }
             catch (Exception ex)
             {
@@ -85,13 +91,13 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpGet("GetEmployeeBySalaryRange")]
-        public ActionResult<List<MasterCompanyModel>> GetEmployeeBySalaryRange(int begin, int end)
+        public ActionResult<List<EmployeeModel>> GetEmployeeBySalaryRange(int begin, int end)
         {
             try
             {
 
 
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
 
                 var BySalaryRange = (from SalaryRange in masteries
@@ -108,7 +114,7 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpDelete("DeleteEmployee")]
-        public ActionResult<List<MasterCompanyModel>> DeleteEmployee(string Document)
+        public ActionResult<List<EmployeeModel>> DeleteEmployee(string Document)
         {
             try
             {
@@ -116,7 +122,7 @@ namespace API_Master_Company.Controllers
 
                 IAddEmployee masteryCompanyDataDeactive = new MasteryCompanyDeactiveJsonControllers();
 
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
 
                 var EmployeeByDocument = from Employee in masteries
@@ -128,7 +134,7 @@ namespace API_Master_Company.Controllers
 
                 }
 
-                masteryCompanyDataDeactive.AddEmployed(new HashSet<MasterCompanyModel>(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList());
+                masteryCompanyDataDeactive.AddEmployed(new HashSet<EmployeeModel>(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList());
                 masteryCompanyData.RemoveEmployed(masteries);
                 return masteries;
             }
@@ -140,7 +146,7 @@ namespace API_Master_Company.Controllers
 
         }
         [HttpPost("InsertEmployee")]
-        public ActionResult<List<MasterCompanyModel>> InsertEmployee(MasterCompanyModel empleado)
+        public ActionResult<List<EmployeeModel>> InsertEmployee(EmployeeModel empleado)
         {
             try
             {
@@ -149,9 +155,9 @@ namespace API_Master_Company.Controllers
 
 
 
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
-                masteries.Add(new MasterCompanyModel()
+                masteries.Add(new EmployeeModel()
                 {
                     Name = empleado.Name,
                     LastName = empleado.LastName,

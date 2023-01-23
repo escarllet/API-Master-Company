@@ -9,6 +9,6 @@ namespace Api.Datos.Repositories
 {
     public interface IAddEmployee
     {
-        void AddEmployed(List<MasterCompanyModel> masteries);
+        void AddEmployed(List<EmployeeModel> masteries);
     }
 }
