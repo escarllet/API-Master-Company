@@ -1,191 +1,197 @@
-﻿using Api.Entidad.Models;
-using Microsoft.AspNetCore.Mvc;
-using Api.Datos.Controllers;
+﻿using Api.Datos.Controllers;
 using Api.Datos.Repositories;
+using Api.Entidad.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API_Master_Company.Controllers
 {
     [ApiController]
-    [Route("API/[controller]")]
+    [Route("API/Employee")]
     public class ApiMasteryCompanyController : ControllerBase
     {
-        private readonly ILogger<ApiMasteryCompanyController> _logger;
+        private readonly IMasterCompanyDatabase masteryCompanyData;
 
-        public ApiMasteryCompanyController(ILogger<ApiMasteryCompanyController> logger)
+        public ApiMasteryCompanyController(IMasterCompanyDatabase masteryCompanyData)
         {
-            _logger = logger;
-
+            this.masteryCompanyData = masteryCompanyData;
         }
-
         [HttpGet("GetAll")]
 
-        public List<MasteryCompanymodeljson> GetAll()
+        public ActionResult<List<MasterCompanyModel>> GetAll()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
-            
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
-            
-            var all = from masterie in masteries
-                                select masterie;
+            try
+            {
 
 
-            return ModelEmployee.makelist(all);
-            //utilizamos if
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+
+                var all = from masterie in masteries
+                          select masterie;
+
+                return ApiMasteryCompanyMakeList.makelist(all);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+
+
 
         }
         [HttpGet("GetDistinct")]
-        public List<MasteryCompanymodeljson> Get()
+        public ActionResult<List<MasterCompanyModel>> Get()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
-
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
-
-            var AllDistinct = (from masterie in masteries
-                                 select masterie).Distinct();
+            try
+            {
 
 
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
-            return ModelEmployee.makelist(AllDistinct);
-            //utilizamos if
+                var AllDistinct = (from masterie in masteries
+                                   select masterie).Distinct();
+
+
+
+                return ApiMasteryCompanyMakeList.makelist(AllDistinct);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
 
         }
         [HttpGet("GetEmployeeSalaryIncrease")]
-        public List<MasteryCompanymodeljson> GetEmployeeSalaryIncrease()
+        public ActionResult<List<MasterCompanyModel>> GetEmployeeSalaryIncrease()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
-
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
-
-            var EmployeeSalaryIncrease = (from SalaryIncrease in masteries
-                                     select new
-                                     {
-                                         SalaryIncrease.Name,
-                                         SalaryIncrease.LastName,
-                                         SalaryIncrease.Document,
-                                         Salary = new Func<double?>(() =>
-                                         {
-                                             try
-                                             {
-                                                 if (SalaryIncrease.Salary >= 100000)
-                                                 {
-                                                     double? Salaryy = SalaryIncrease.Salary + (SalaryIncrease.Salary * 0.25);
-                                                     return Salaryy;
-                                                 }
-                                                 else
-                                                 {
-                                                     double? Salaryy = SalaryIncrease.Salary + (SalaryIncrease.Salary * 0.3);
-                                                     return Salaryy;
-                                                 }
-
-                                             }
-                                             catch
-                                             {
-                                                 //si ocurre un error
-                                                 return 0;
-                                             }
-                                         }
-                                                     )
-                                    (),
-                                         SalaryIncrease.Gender,
-                                         SalaryIncrease.Position,
-                                         SalaryIncrease.StartDate
-                                     }).Distinct();
-
-            List<MasteryCompanymodeljson> masteri = new List<MasteryCompanymodeljson>();
-            foreach (var newlist in EmployeeSalaryIncrease)
+            try
             {
-                masteri.Add(new MasteryCompanymodeljson()
+
+
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet().Distinct().ToList();
+                masteries.ForEach(masterie =>
                 {
-                    Name = newlist.Name,
-                    LastName = newlist.LastName,
-                    Document = newlist.Document,
-                    Salary = newlist.Salary,
-                    Gender = newlist.Gender,
-                    Position = newlist.Position,
-                    StartDate = newlist.StartDate,
+                    masterie.Salary = masterie.Salary >= 100000 ? masterie.Salary + (masterie.Salary * 0.25) : masterie.Salary + (masterie.Salary * 0.3);
                 });
+                
+                return masteries;
             }
-            return masteri;
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
 
         }
         [HttpGet("GetEmployeesProportionByGender")]
-        public List<string> GetEmployeesProportionByGender()
+        public ActionResult<List<string>> GetEmployeesProportionByGender()
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
+            try
+            {
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+                var employees = (from masterie in masteries
+                                 select masterie).Distinct();
 
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
-            var male = ((from masculine in Get() where masculine.Gender == "M" select masculine).Distinct().Count() * 100) / Get().Count();
-            var female = ((from feminine in Get() where feminine.Gender == "F" select feminine).Distinct().Count() * 100) / Get().Count();
+                
+                var male = ((from masculine in employees where masculine.Gender == "M" select masculine).Distinct().Count() * 100) / employees.Count();
+                var female = ((from feminine in employees where feminine.Gender == "F" select feminine).Distinct().Count() * 100) / employees.Count();
 
-            List<string> a = new List<string>();
-            a.Add("Masculino: " + male + "%");
-            a.Add("Femenino: " + female + "%");
-            return a;
+                List<string> a = new List<string>();
+                a.Add("Masculino: " + male + "%");
+                a.Add("Femenino: " + female + "%");
+                return a;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
 
         }
         [HttpGet("GetEmployeeBySalaryRange")]
-        public List<MasteryCompanymodeljson> GetEmployeeBySalaryRange(int inicio, int final)
+        public ActionResult<List<MasterCompanyModel>> GetEmployeeBySalaryRange(int begin, int end)
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
-
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
-
-
-            var BySalaryRange = (from SalaryRange in masteries
-                                 where SalaryRange.Salary >= inicio && SalaryRange.Salary <= final
-                                 select SalaryRange).Distinct();
+            try
+            {
 
 
-            return ModelEmployee.makelist(BySalaryRange);
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+
+
+                var BySalaryRange = (from SalaryRange in masteries
+                                     where SalaryRange.Salary >= begin && SalaryRange.Salary <= end
+                                     select SalaryRange).Distinct();
+
+
+                return ApiMasteryCompanyMakeList.makelist(BySalaryRange);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
 
         }
-        [HttpPost("DeleteEmployee")]
-        public List<MasteryCompanymodeljson> DeleteEmployee(string Document)
+        [HttpDelete("DeleteEmployee")]
+        public ActionResult<List<MasterCompanyModel>> DeleteEmployee(string Document)
         {
-            IMasterCompanyDatabase masteryCompanyData = new MasteryCompanyActivateJsonControllers();
-            IAddEmployee masteryCompanyDataDeactive = new MasteryCompanyDeactiveJsonControllers();
-
-            List<MasteryCompanymodeljson> masteries = masteryCompanyData.ConvertDataToListObjet();
+            try
+            {
 
 
-            var EmployeeByDocument = from Employee in masteries
-                                where Employee.Document == Document
-                                select Employee;
-            if (EmployeeByDocument != null)
-            {             
-                masteries = masteries.Except(ModelEmployee.makelist(EmployeeByDocument)).ToList();
-               
+                IAddEmployee masteryCompanyDataDeactive = new MasteryCompanyDeactiveJsonControllers();
+
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+
+
+                var EmployeeByDocument = from Employee in masteries
+                                         where Employee.Document == Document
+                                         select Employee;
+                if (EmployeeByDocument != null)
+                {
+                    masteries = masteries.Except(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList();
+
+                }
+
+                masteryCompanyDataDeactive.AddEmployed(new HashSet<MasterCompanyModel>(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList());
+                masteryCompanyData.RemoveEmployed(masteries);
+                return masteries;
             }
-           
-            masteryCompanyDataDeactive.AddEmployed(new HashSet<MasteryCompanymodeljson>(ModelEmployee.makelist(EmployeeByDocument)).ToList());
-            masteryCompanyData.RemoveEmployed(masteries);
-            return masteries;
-
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
 
 
         }
         [HttpPost("InsertEmployee")]
-        public List<MasteryCompanymodeljson> InsertEmployee(MasteryCompanymodeljson empleado)
+        public ActionResult<List<MasterCompanyModel>> InsertEmployee(MasterCompanyModel empleado)
         {
-            IAddEmployee masteryCompanyDataActive = new MasteryCompanyActivateJsonControllers();
-            
+            try
+            {
+                IAddEmployee masteryCompanyDataActive = new MasteryCompanyActivateJsonControllers();
 
-            IMasterCompanyDatabase MasterCompanyDatabase = new MasteryCompanyActivateJsonControllers();
 
-            List<MasteryCompanymodeljson> masteries = MasterCompanyDatabase.ConvertDataToListObjet();
 
-            masteries.Add(new MasteryCompanymodeljson() { 
-                Name = empleado.Name,
-                LastName= empleado.LastName,
-                Document= empleado.Document,
-                Salary= empleado.Salary,
-                Gender= empleado.Gender,
-                Position= empleado.Position,
-                StartDate= empleado.StartDate
+
+                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
+
+                masteries.Add(new MasterCompanyModel()
+                {
+                    Name = empleado.Name,
+                    LastName = empleado.LastName,
+                    Document = empleado.Document,
+                    Salary = empleado.Salary,
+                    Gender = empleado.Gender,
+                    Position = empleado.Position,
+                    StartDate = empleado.StartDate
+                }
+                );
+                masteryCompanyDataActive.AddEmployed(masteries);
+                return masteries;
             }
-            );
-            masteryCompanyDataActive.AddEmployed(masteries);
-            return masteries;
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
     }
 }

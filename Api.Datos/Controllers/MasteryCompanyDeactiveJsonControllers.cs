@@ -11,7 +11,7 @@ namespace Api.Datos.Controllers
 {
     public class MasteryCompanyDeactiveJsonControllers :  IAddEmployee
     {
-        public void AddEmployed(List<MasteryCompanymodeljson> masteries)
+        public void AddEmployed(List<MasterCompanyModel> masteries)
         {
             string output = JsonConvert.SerializeObject(masteries);
             using (StreamWriter sw = File.AppendText("../MasteryCompanyDeactiveEmployee.txt"))

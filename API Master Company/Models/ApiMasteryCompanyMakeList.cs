@@ -3,14 +3,14 @@ using Api.Datos.Controllers;
 
 namespace API_Master_Company
 {
-    public class ModelEmployee
+    public class ApiMasteryCompanyMakeList
     {
-        public static List<MasteryCompanymodeljson> makelist(IEnumerable<MasteryCompanymodeljson> all)
+        public static List<MasterCompanyModel> makelist(IEnumerable<MasterCompanyModel> all)
         {
-            List<MasteryCompanymodeljson> masteri = new List<MasteryCompanymodeljson>();
+            List<MasterCompanyModel> masteri = new List<MasterCompanyModel>();
             foreach (var newlist in all)
             {
-                masteri.Add(new MasteryCompanymodeljson()
+                masteri.Add(new MasterCompanyModel()
                 {
                     Name = newlist.Name,
                     LastName = newlist.LastName,
