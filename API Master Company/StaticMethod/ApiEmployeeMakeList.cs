@@ -3,7 +3,7 @@ using Api.Datos.Controllers;
 
 namespace API_Master_Company
 {
-    public class ApiMasteryCompanyMakeList
+    public class ApiEmployeeMakeList
     {
         public static List<EmployeeModel> makelist(IEnumerable<EmployeeModel> all)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Api.Datos.Controllers
 {
-    public class MasteryCompanyDeactiveJsonControllers :  IAddEmployee
+    public class DeactiveEmployeeJsonControllers :  IAddEmployee
     {
         public void AddEmployed(List<EmployeeModel> masteries)
         {

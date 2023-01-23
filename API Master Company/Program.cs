@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IMasterCompanyDatabase, MasteryCompanyActivateJsonControllers>();
+builder.Services.AddScoped<IMasterCompanyDatabase, ActivateEmployeeJsonControllers>();
 
 builder.Services.AddCors(options =>
  options.AddPolicy("NewPolitic", app =>

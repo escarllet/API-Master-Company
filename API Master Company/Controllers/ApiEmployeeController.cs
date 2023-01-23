@@ -8,11 +8,11 @@ namespace API_Master_Company.Controllers
 {
     [ApiController]
     [Route("API/Employee")]
-    public class ApiMasteryCompanyController : ControllerBase
+    public class ApiEmployeeController : ControllerBase
     {
         private readonly IMasterCompanyDatabase masteryCompanyData;
 
-        public ApiMasteryCompanyController(IMasterCompanyDatabase masteryCompanyData)
+        public ApiEmployeeController(IMasterCompanyDatabase masteryCompanyData)
         {
             this.masteryCompanyData = masteryCompanyData;
         }
@@ -31,7 +31,7 @@ namespace API_Master_Company.Controllers
 
 
 
-                return ApiMasteryCompanyMakeList.makelist(AllDistinct);
+                return ApiEmployeeMakeList.makelist(AllDistinct);
 
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace API_Master_Company.Controllers
                                      select SalaryRange).Distinct();
 
 
-                return ApiMasteryCompanyMakeList.makelist(BySalaryRange);
+                return ApiEmployeeMakeList.makelist(BySalaryRange);
             }
             catch (Exception ex)
             {
@@ -120,7 +120,7 @@ namespace API_Master_Company.Controllers
             {
 
 
-                IAddEmployee masteryCompanyDataDeactive = new MasteryCompanyDeactiveJsonControllers();
+                IAddEmployee masteryCompanyDataDeactive = new DeactiveEmployeeJsonControllers();
 
                 List<EmployeeModel> masteries = masteryCompanyData.ConvertDataToListObjet();
 
@@ -130,11 +130,11 @@ namespace API_Master_Company.Controllers
                                          select Employee;
                 if (EmployeeByDocument != null)
                 {
-                    masteries = masteries.Except(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList();
+                    masteries = masteries.Except(ApiEmployeeMakeList.makelist(EmployeeByDocument)).ToList();
 
                 }
 
-                masteryCompanyDataDeactive.AddEmployed(new HashSet<EmployeeModel>(ApiMasteryCompanyMakeList.makelist(EmployeeByDocument)).ToList());
+                masteryCompanyDataDeactive.AddEmployed(new HashSet<EmployeeModel>(ApiEmployeeMakeList.makelist(EmployeeByDocument)).ToList());
                 masteryCompanyData.RemoveEmployed(masteries);
                 return masteries;
             }
@@ -150,7 +150,7 @@ namespace API_Master_Company.Controllers
         {
             try
             {
-                IAddEmployee masteryCompanyDataActive = new MasteryCompanyActivateJsonControllers();
+                IAddEmployee masteryCompanyDataActive = new ActivateEmployeeJsonControllers();
 
 
 

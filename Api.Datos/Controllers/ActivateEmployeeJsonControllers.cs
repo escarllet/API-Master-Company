@@ -11,7 +11,7 @@ using Api.Datos.Repositories;
 
 namespace Api.Datos.Controllers
 {
-    public class MasteryCompanyActivateJsonControllers : IMasterCompanyDatabase, IConvertDataToString, IAddEmployee
+    public class ActivateEmployeeJsonControllers : IMasterCompanyDatabase, IConvertDataToString, IAddEmployee
     {
         public string PathDataBase() {
             string path = @"../MasteryCompanyActiveEmployee.txt";
