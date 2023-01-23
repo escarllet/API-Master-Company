@@ -15,30 +15,7 @@ namespace API_Master_Company.Controllers
         {
             this.masteryCompanyData = masteryCompanyData;
         }
-        [HttpGet("GetAll")]
-
-        public ActionResult<List<MasterCompanyModel>> GetAll()
-        {
-            try
-            {
-
-
-                List<MasterCompanyModel> masteries = masteryCompanyData.ConvertDataToListObjet();
-
-                var all = from masterie in masteries
-                          select masterie;
-
-                return ApiMasteryCompanyMakeList.makelist(all);
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
-
-
-
-        }
+        
         [HttpGet("GetDistinct")]
         public ActionResult<List<MasterCompanyModel>> Get()
         {

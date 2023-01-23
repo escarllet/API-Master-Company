@@ -12,7 +12,7 @@ export class AppComponent {
 
   }
   ngOnInit(){
-    this.dataSvc.getAllEmployee().subscribe(res=>{
+    this.dataSvc.getEmployee().subscribe(res=>{
       console.log('Res',res);
     });
   }

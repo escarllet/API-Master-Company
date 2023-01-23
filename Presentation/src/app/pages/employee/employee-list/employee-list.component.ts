@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GetAllEmployeeService } from 'src/app/services/get-all-employee.service';
-
+import { Employee } from 'src/app/models/employee';
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
@@ -9,10 +9,12 @@ import { GetAllEmployeeService } from 'src/app/services/get-all-employee.service
 export class EmployeeListComponent {
 
   constructor(
-    private getallemployeeservice:GetAllEmployeeService 
+    private getallemployeeservice:GetAllEmployeeService, 
+    
   ){
-    this.getallemployeeservice.getAllEmployee().subscribe(resp=>(
+    this.getallemployeeservice.getEmployee().subscribe(resp=>(
       console.log(resp)
+      
     ))
   }
 }

@@ -1,21 +1,17 @@
 import { Injectable } from "@angular/core";
-import{HttpClient, HttpHeaders} from "@angular/common/http"
+import {HttpClient, HttpHeaders} from "@angular/common/http"
+import { Employee } from "../models/employee";
+import {Observable} from "rxjs";
 @Injectable({
     providedIn: 'root'
 })
 export class GetAllEmployeeService{
-    _url = 'https://localhost:7083/API/Employee/GetAll'
+    _url = 'https://localhost:7083/API/Employee/GetDistinct'
     constructor(
         private http:HttpClient
     ){     
     }
-    getAllEmployee(){
-     let header = new HttpHeaders()
-     .set('Type-content','aplication/json')  
-
-        return this.http.get(this._url, {
-            headers:header
-        });
-
+    getEmployee():Observable<Employee[]>{
+        return this.http.get<Employee[]>(this._url)
     }
 }
