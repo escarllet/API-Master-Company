@@ -1,9 +1,9 @@
 export interface Employee{
-    Name: string;
-    LastName: string;
-    Document: string;
-    Salary: number;
-    Gender: string;
-    Position: string;
-    StartDate:string;
+    name: string;
+    lastName: string;
+    document: string;
+    salary: number;
+    gender: string;
+    position: string;
+    startDate:string;
 }

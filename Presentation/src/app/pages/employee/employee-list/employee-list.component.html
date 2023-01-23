@@ -1,1 +1,30 @@
-<p>Lista de empleados</p>
+
+<h1><span class="blue">&lt;</span>All<span class="blue">&gt;</span> <span class="yellow">Employee</span></h1>
+    
+    <table class="container">
+        <thead>
+            <tr>
+                <th><h1>No.</h1></th>
+                <th><h1>Name</h1></th>
+                <th><h1>Last Name</h1></th>
+                <th><h1>Document</h1></th>
+                <th><h1>Salary</h1></th>
+                <th><h1>Gender</h1></th>
+                <th><h1>Position</h1></th>
+                <th><h1>StartDate</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr *ngFor="let employ of employee; let i = index">
+                <td>{{i}}</td>
+                <td>{{employ.name}}</td>
+                <td>{{employ.lastName}}</td>
+                <td>{{employ.document}}</td>
+                <td>{{employ.salary}}</td>
+                <td>{{employ.gender}}</td>           
+                <td>{{employ.position}}</td>
+                <td>{{employ.startDate}}</td>
+            </tr>
+        </tbody>
+    </table>
